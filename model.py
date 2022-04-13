@@ -16,17 +16,18 @@ class User(db.Model):
     password = db.Column(db.String)
 
 
-    # ratings = a list of Ratings objects
+# ratings = a list of Ratings objects
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'
 
-    
+
+
 class Movie(db.Model):
 
     """A Movie."""
 
-    __table__ = "movies"
+    __tablename__ = "movies"
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True) 
     title = db.Column(db.String)
@@ -34,34 +35,26 @@ class Movie(db.Model):
     released_date = db.Column(db.DateTime)
     poster_path = db.Column(db.String) 
 
-    # ratings = a list of Ratings objects
+
+# ratings = a list of Ratings objects
 
     def __repr__(self):
-        return f'<Movie movie_id={self.movie_id} title={self.title}> '  
+        return f'<Movie movie_id={self.movie_id} title={self.title}>'  
 
-class Rating(db.model):
-    
+class Rating(db.Model):
+
     __tablename__ = "ratings"
-    
-    rating_id = db.column(db.Integer, autoincrement=True, primary_key=True)
-    score = db.column(db.Integer)
-    movie_id = db.column(db.Integer,db.ForeignKey("movies.movie_id"))     
-    user_id = db.column(db.Integer, db.ForeignKey("users.user_id"))  
+
+    rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    score = db.Column(db.Integer)
+    movie_id = db.Column(db.Integer,db.ForeignKey("movies.movie_id"))     
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))  
 
     movie = db.relationship("Movie", backref="ratings")
     user = db.relationship("User", backref="ratings")
 
     def __repr__(self):
         return f'<Rating rating_id={self.rating_id} score = {self.score}>'    
-
-
-
-
-
-
-        
-              
-
 
 
 def connect_to_db(flask_app, db_uri="postgresql:///ratings", echo=True):
