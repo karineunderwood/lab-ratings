@@ -19,7 +19,7 @@ class User(db.Model):
 # ratings = a list of Ratings objects
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} email={self.email}>'
+        return f'<User user_id={self.user_id} email={self.email} >'
 
 
 
@@ -32,7 +32,7 @@ class Movie(db.Model):
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True) 
     title = db.Column(db.String)
     overview = db.Column(db.Text)
-    released_date = db.Column(db.DateTime)
+    release_date = db.Column(db.DateTime)
     poster_path = db.Column(db.String) 
 
 
