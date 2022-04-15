@@ -1,5 +1,6 @@
 """Server for movie ratings app."""
 
+from crypt import methods
 from flask import (Flask, render_template, request, flash, session, 
                   redirect)
 
@@ -45,6 +46,25 @@ def all_users():
 
     return render_template("all_users.html", users=users)
 
+@app.route("/users", methods=["POST"])
+def register_user():
+    """Create a new user."""
+
+    email = request.form.get("email")
+    password= request.form.get("password")
+
+    user = crud.get_user_by_email(email)
+    # check if the user's email is already registered
+    # then flash a message and say can't create an account
+    # with that email
+    if user:
+       flash("You cannot create an account with this email. Please try again!") 
+    else:
+        user = crud.create_user(email, password) 
+
+        flash("Account successfully created!")
+    return redirect("/")
+
 @app.route("/users/<user_id>")
 def show_user(user_id):
     """Show details in a particular user."""
@@ -54,6 +74,25 @@ def show_user(user_id):
 
     return render_template("user_details.html", user=user)
 
+@app.route("/login", methods=["POST"])
+def login():
+    """ Processing user login."""
+
+    email= request.form.get("email")
+    password =request.form.get("password")
+
+    user = crud.get_user_by_email(email)
+
+    if not user or user.password != password:
+        flash("The email or password is incorrect.")
+    else:
+        
+        # session["user_id"] = user.user_id
+
+        session["user_email"] = user.email
+        flash(f"Welcome back, {user.email}!")
+
+    return redirect("/")
 
 
 
